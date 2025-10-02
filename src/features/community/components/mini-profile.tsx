@@ -9,8 +9,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { IUserProfile } from "@/features/user_profile";
+import { useGetPersonal, type IUserProfile } from "@/features/user_profile";
 import type { IUser } from "@/types/user";
+import { BACKEND_IP } from "@/utils/endpoints";
 import { useNavigate } from "@tanstack/react-router";
 import {
   ArrowUpRight,
@@ -34,6 +35,7 @@ const MiniProfile = ({
   currentView: "feed" | "saved";
 }) => {
   const navigate = useNavigate();
+  const { data: personalData} = useGetPersonal();
 
   const {
     data: savedPostsCount = 0,
@@ -66,6 +68,22 @@ const MiniProfile = ({
     },
   ];
 
+  const getImageUrl = (path: string | undefined) => {
+    if (!path) return "/placeholder.svg";
+    if (path.startsWith("http")) return path;
+    const fullUrl = `${BACKEND_IP}/${path}`;
+    return fullUrl;
+  };
+
+  const fullName = personalData
+    ? `${personalData.first_name}${
+        personalData.middle_name ? ` ${personalData.middle_name}` : ""
+      } ${personalData.last_name}`
+    : "User";
+
+  const avatarUrl = userData?.avatar;
+  const bannerUrl = userData?.banner;
+
   return (
     <div className="flex flex-col gap-3 w-full">
       <Card className="shadow-sm pt-0 border border-muted-foreground/20 overflow-hidden">
@@ -73,22 +91,22 @@ const MiniProfile = ({
           <div className="bg-gradient-to-r from-primary/20 via-primary/10 to-background h-24 sm:h-28">
             {bannerMock && (
               <LazyLoadImage
-                src={"/placeholder.svg"}
+                src={getImageUrl(bannerUrl)}
                 alt="Profile banner"
-                className="absolute inset-0 dark:brightness-[0.8] rounded-t-xl w-full h-full object-cover"
+                className="absolute inset-0 dark:brightness-[0.8] w-full h-full object-cover"
               />
             )}
           </div>
           <div className="bottom-0 left-4 absolute translate-y-1/2 transform">
             <div className="border-4 border-mute rounded-full overflow-hidden">
-              <Avatar className="size-16 sm:size-20">
+              <Avatar className="size-20 shrink-0">
                 <AvatarImage
-                  src={userData.avatar}
-                  alt={userData.email}
-                  className="object-cover"
+                  src={getImageUrl(avatarUrl)}
+                  alt={fullName}
+                  className="rounded-full w-full h-full object-cover"
                 />
                 <AvatarFallback className="font-bold text-4xl">
-                  {profile.first_name?.charAt(0) || userData.email.charAt(0)}
+                  {fullName[0].toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </div>

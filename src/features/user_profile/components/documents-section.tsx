@@ -131,7 +131,7 @@ const DocumentsSection = ({
                     <div className="flex gap-2">
                       <Button variant="outline" size="icon">
                         <a
-                          href={`${BACKEND_IP}/${document.file_path}`}
+                          href={`${BACKEND_IP}${document.file_path}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center"

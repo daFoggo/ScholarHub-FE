@@ -47,8 +47,9 @@ export const ProfileHeader = ({
   const location = useLocation();
   const { data, isLoading } = useGetPersonal();
 
-  const { data: profileStats, isLoading: statsLoading } =
-    useGetProfileStats(userId || "");
+  const { data: profileStats, isLoading: statsLoading } = useGetProfileStats(
+    userId || ""
+  );
 
   const fullName = data?.first_name
     ? `${data.first_name}${data.middle_name ? ` ${data.middle_name}` : ""} ${
@@ -56,8 +57,8 @@ export const ProfileHeader = ({
       }`
     : "User";
 
-  const avatarUrl =  userData?.avatar;
-  const bannerUrl =  userData?.banner;
+  const avatarUrl = userData?.avatar;
+  const bannerUrl = userData?.banner;
 
   const getImageUrl = (path: string | undefined) => {
     if (!path) return "/placeholder.svg";
@@ -114,8 +115,12 @@ export const ProfileHeader = ({
               isCurrentUser={isCurrentUser}
               className="rounded-full"
             >
-              <Avatar className="size-32">
-                <AvatarImage src={getImageUrl(avatarUrl)} alt={fullName} />
+              <Avatar className="size-32 shrink-0">
+                <AvatarImage
+                  src={getImageUrl(avatarUrl)}
+                  alt={fullName}
+                  className="rounded-full w-full h-full object-cover"
+                />
                 <AvatarFallback className="font-bold text-4xl">
                   {fullName[0].toUpperCase()}
                 </AvatarFallback>

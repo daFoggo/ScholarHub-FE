@@ -176,7 +176,7 @@ const Post = ({
         {post.image && (
           <div className="relative mb-3 rounded-md w-full aspect-video overflow-hidden">
             <LazyLoadImage
-              src={`${BACKEND_IP}/${post.image}` || "/placeholder.svg"}
+              src={`${BACKEND_IP}${post.image}` || "/placeholder.svg"}
               alt="Post image"
               className="w-full h-full object-cover"
             />
@@ -187,7 +187,7 @@ const Post = ({
         {post.video && (
           <div className="relative mb-3 rounded-md w-full aspect-video overflow-hidden">
             <video
-              src={`${BACKEND_IP}/${post.video}` || "/placeholder.svg"}
+              src={`${BACKEND_IP}${post.video}` || "/placeholder.svg"}
               controls
               className="w-full h-full object-cover"
               preload="metadata"

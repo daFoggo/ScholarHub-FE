@@ -51,7 +51,7 @@ export const NetworkSuggestions = () => {
         {connections.map((connection: any) => {
           return (
             <div key={connection.id} className="flex items-start gap-3">
-              <Avatar className="size-12">
+              <Avatar className="size-12 object-cover shrink-0">
                 <AvatarImage
                   src={connection.avatar || undefined}
                   alt={connection.name}

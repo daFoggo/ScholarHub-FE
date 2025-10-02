@@ -115,6 +115,7 @@ export interface IReference {
 export interface IProfileHeaderProps {
   userData?: IUser;
   isCurrentUser?: boolean;
+  userId: string;
   followers?: number;
   following?: number;
   createdAt?: string;

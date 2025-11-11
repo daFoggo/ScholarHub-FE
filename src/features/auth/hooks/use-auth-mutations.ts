@@ -125,11 +125,11 @@ export const useAuthStatus = () => {
       const { payload } = await authService.checkAuth();
       return payload;
     },
-    initialData: { isAuthenticated: false, user: null },
+    initialData: null,
   });
   return {
-    isAuthenticated: session.data.isAuthenticated,
-    user: session.data.user,
+    isAuthenticated: session.data ? true : false,
+    user: session.data,
     isAuthChecked: session.isSuccess || session.isError,
     isLoading: session.isLoading,
   };

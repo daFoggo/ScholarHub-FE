@@ -4,9 +4,7 @@ import { USER_PROFILE_ENDPOINTS } from "./endpoints";
 
 export interface IExperienceResponse {
   success: boolean;
-  payload: {
-    experience: IExperience[] | IExperience;
-  };
+  payload: IExperience[];
 }
 
 export interface IExperienceDTO extends Omit<IExperience, "id"> {}

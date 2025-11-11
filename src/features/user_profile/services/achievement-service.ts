@@ -4,9 +4,7 @@ import { USER_PROFILE_ENDPOINTS } from "./endpoints";
 
 export interface IAchievementResponse {
   success: boolean;
-  payload: {
-    achievement: IAchievement[] | IAchievement;
-  };
+  payload: IAchievement[];
 }
 
 export interface IAchievementDTO extends Omit<IAchievement, "id"> {}
@@ -41,7 +39,7 @@ export const achievementService = {
     const response = await apiClient.delete(
       `${USER_PROFILE_ENDPOINTS.ACHIEVEMENT}`,
       {
-       id,
+        id,
       }
     );
     return response as IAchievementResponse;

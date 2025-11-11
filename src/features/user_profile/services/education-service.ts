@@ -4,9 +4,7 @@ import { USER_PROFILE_ENDPOINTS } from "./endpoints";
 
 export interface IEducationResponse {
   success: boolean;
-  payload: {
-    education: IEducation[] | IEducation;
-  };
+  payload: IEducation[];
 }
 
 export interface IEducationDTO extends Omit<IEducation, "id"> {}

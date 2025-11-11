@@ -4,9 +4,7 @@ import { USER_PROFILE_ENDPOINTS } from "./endpoints";
 
 export interface IReferenceResponse {
   success: boolean;
-  payload: {
-    reference: IReference[] | IReference;
-  };
+  payload: IReference[];
 }
 
 export interface IReferenceDTO extends Omit<IReference, "id"> {}

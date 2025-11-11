@@ -9,9 +9,9 @@ import {
 } from "@/utils/endpoints";
 
 export interface ILoginResponse {
-    access_token: string;
-    refresh_token: string;
-    token_type: string;
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
 }
 
 export interface IRegisterResponse {
@@ -40,10 +40,7 @@ export interface IUserResponse {
 
 export interface IAuthCheckResponse {
   success: boolean;
-  payload: {
-    isAuthenticated: boolean;
-    user: IUser | null;
-  };
+  payload: IUser | null;
 }
 
 export interface ILogoutResponse {
@@ -57,10 +54,7 @@ export const authService = {
     if (!access_token) {
       return {
         success: false,
-        payload: {
-          isAuthenticated: false,
-          user: null,
-        },
+        payload: null,
       };
     }
 
@@ -69,18 +63,12 @@ export const authService = {
 
       return {
         success: true,
-        payload: {
-          isAuthenticated: true,
-          user: response.payload,
-        },
+        payload: response.payload,
       };
     } catch (error) {
       return {
         success: false,
-        payload: {
-          isAuthenticated: false,
-          user: null,
-        },
+        payload: null,
       };
     }
   },
@@ -96,15 +84,9 @@ export const authService = {
     const response = await fetch(`${BACKEND_API}${LOGIN_API}`, {
       method: "POST",
       body: formData,
-    }).then((res) => res.json());
+    }).then((res) => res.json()); 
 
-    console.log("Login response:", response);
-
-    if (
-      response &&
-      response.access_token &&
-      response.refresh_token
-    ) {
+    if (response && response.access_token && response.refresh_token) {
       const { access_token, refresh_token } = response;
       authTokenManagement.setTokens(access_token, refresh_token);
     }

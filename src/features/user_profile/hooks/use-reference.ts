@@ -10,19 +10,16 @@ import type { IReference } from "../utils/types";
 export const referenceKeys = {
   all: ["reference"] as const,
   lists: () => [...referenceKeys.all, "list"] as const,
-  list: () => [...referenceKeys.lists(), "list"] as const,
   details: () => [...referenceKeys.all, "detail"] as const,
   detail: (id: string) => [...referenceKeys.details(), id] as const,
 };
 
 export const useGetReference = () => {
   return useQuery({
-    queryKey: referenceKeys.list(),
+    queryKey: referenceKeys.lists(),
     queryFn: async () => {
       const response = await referenceService.getReference();
-      //@ts-ignore
-      const references = response.payload[1];
-      return references;
+      return response.payload;
     },
     staleTime: STALE_TIME,
     gcTime: GC_TIME,

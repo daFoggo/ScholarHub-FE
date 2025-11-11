@@ -4,9 +4,7 @@ import { USER_PROFILE_ENDPOINTS } from "./endpoints";
 
 export interface IPersonalResponse {
   success: boolean;
-  payload: {
-    personal: IPersonalInfo;
-  };
+  payload: IPersonalInfo;
 }
 
 export interface IPersonalDTO extends Omit<IPersonalInfo, "id"> {}
@@ -29,7 +27,6 @@ export const personalService = {
       USER_PROFILE_ENDPOINTS.PERSONAL,
       payload
     );
-    console.log("Response from postPersonal:", response);
     return response as IPersonalResponse;
   },
 

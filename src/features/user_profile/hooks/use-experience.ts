@@ -19,7 +19,7 @@ export const useGetExperience = () => {
     queryKey: experienceKeys.list(),
     queryFn: async () => {
       const response = await experienceService.getExperience();
-      return response.payload.experience;
+      return response.payload;
     },
     staleTime: STALE_TIME,
     gcTime: GC_TIME,
@@ -34,11 +34,7 @@ export const usePostExperience = () => {
     onSuccess: (newScholarship) => {
       // Update the cache with the new scholarship data
       queryClient.setQueryData(
-        experienceKeys.detail(
-          Array.isArray(newScholarship.payload.experience)
-            ? newScholarship.payload.experience[0]?.id || ""
-            : newScholarship.payload.experience.id || ""
-        ),
+        experienceKeys.detail(newScholarship.payload[0]?.id || ""),
         newScholarship
       );
 
@@ -57,11 +53,7 @@ export const usePutExperience = () => {
     onSuccess: (newScholarship) => {
       // Update the cache with the new scholarship data
       queryClient.setQueryData(
-        experienceKeys.detail(
-          Array.isArray(newScholarship.payload.experience)
-            ? newScholarship.payload.experience[0]?.id || ""
-            : newScholarship.payload.experience.id || ""
-        ),
+        experienceKeys.detail(newScholarship.payload[0]?.id || ""),
         newScholarship
       );
 

@@ -4,18 +4,14 @@ import { USER_PROFILE_ENDPOINTS } from "./endpoints";
 
 export interface ICertificationResponse {
   success: boolean;
-  payload: {
-    certification: ICertification[] | ICertification;
-  };
+  payload: ICertification[];
 }
 
 export interface ICertificationDTO extends Omit<ICertification, "id"> {}
 
 export const certificationService = {
   getCertification: async (): Promise<ICertificationResponse> => {
-    const response = await apiClient.get(
-      USER_PROFILE_ENDPOINTS.CERTIFICATION
-    );
+    const response = await apiClient.get(USER_PROFILE_ENDPOINTS.CERTIFICATION);
     return response as ICertificationResponse;
   },
 

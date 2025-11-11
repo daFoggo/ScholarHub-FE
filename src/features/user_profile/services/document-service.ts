@@ -18,10 +18,7 @@ export interface DocumentUpdateRequest {
 export interface DocumentResponse {
   success: boolean;
   message: string;
-  payload?: {
-    document?: IDocument;
-    documents?: IDocument[];
-  };
+  payload?: IDocument[];
 }
 
 export const documentService = {
@@ -30,13 +27,17 @@ export const documentService = {
     return apiClient.get(USER_PROFILE_ENDPOINTS.DOCUMENT);
   },
 
-  // Tạo document mới  
-  createDocument: async (data: DocumentCreateRequest): Promise<DocumentResponse> => {
+  // Tạo document mới
+  createDocument: async (
+    data: DocumentCreateRequest
+  ): Promise<DocumentResponse> => {
     return apiClient.post(USER_PROFILE_ENDPOINTS.DOCUMENT, data);
   },
 
   // Cập nhật document
-  updateDocument: async (data: DocumentUpdateRequest): Promise<DocumentResponse> => {
+  updateDocument: async (
+    data: DocumentUpdateRequest
+  ): Promise<DocumentResponse> => {
     return apiClient.put(USER_PROFILE_ENDPOINTS.DOCUMENT, data);
   },
 

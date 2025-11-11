@@ -24,7 +24,7 @@ export const useGetDocuments = () => {
     queryFn: async () => {
       const response = await documentService.getDocuments();
       if (response.success) {
-        return response.payload?.documents || [];
+        return response.payload || [];
       }
       throw new Error(response.message);
     },
@@ -45,7 +45,7 @@ export const usePostDocument = () => {
       if (!response.success) {
         throw new Error(response.message);
       }
-      return response.payload?.document;
+      return response.payload;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["documents"] });
@@ -72,7 +72,7 @@ export const usePutDocument = () => {
       if (!response.success) {
         throw new Error(response.message);
       }
-      return response.payload?.document;
+      return response.payload;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["documents"] });

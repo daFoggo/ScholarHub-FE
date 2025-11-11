@@ -19,7 +19,7 @@ export const useGetEducation = () => {
     queryKey: educationKeys.list(),
     queryFn: async () => {
       const response = await educationService.getEducation();
-      return response.payload.education;
+      return response.payload;
     },
     staleTime: STALE_TIME,
     gcTime: GC_TIME,
@@ -33,9 +33,7 @@ export const usePostEducation = () => {
     onSuccess: (newScholarship) => {
       // Update the cache with the new scholarship data
       queryClient.setQueryData(
-        educationKeys.detail(Array.isArray(newScholarship.payload.education) 
-          ? newScholarship.payload.education[0]?.id || "" 
-          : newScholarship.payload.education.id || ""),
+        educationKeys.detail(newScholarship.payload[0]?.id || ""),
         newScholarship
       );
 
@@ -54,9 +52,7 @@ export const usePutEducation = () => {
     onSuccess: (newScholarship) => {
       // Update the cache with the new scholarship data
       queryClient.setQueryData(
-        educationKeys.detail(Array.isArray(newScholarship.payload.education) 
-          ? newScholarship.payload.education[0]?.id || "" 
-          : newScholarship.payload.education.id || ""),
+        educationKeys.detail(newScholarship.payload[0]?.id || ""),
         newScholarship
       );
 
@@ -79,4 +75,4 @@ export const useDeleteEducation = () => {
       });
     },
   });
-}
+};

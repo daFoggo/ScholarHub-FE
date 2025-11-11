@@ -19,7 +19,7 @@ export const useGetCertification = () => {
     queryKey: certificationKeys.list(),
     queryFn: async () => {
       const response = await certificationService.getCertification();
-      return response.payload.certification;
+      return response.payload;
     },
     staleTime: STALE_TIME,
     gcTime: GC_TIME,
@@ -34,11 +34,7 @@ export const usePostCertification = () => {
     onSuccess: (newScholarship) => {
       // Update the cache with the new scholarship data
       queryClient.setQueryData(
-        certificationKeys.detail(
-          Array.isArray(newScholarship.payload.certification)
-            ? newScholarship.payload.certification[0]?.id || ""
-            : newScholarship.payload.certification.id || ""
-        ),
+        certificationKeys.detail(newScholarship.payload[0]?.id || ""),
         newScholarship
       );
 
@@ -53,15 +49,12 @@ export const usePostCertification = () => {
 export const usePutCertification = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: ICertification) => certificationService.putCertification(data),
+    mutationFn: (data: ICertification) =>
+      certificationService.putCertification(data),
     onSuccess: (newScholarship) => {
       // Update the cache with the new scholarship data
       queryClient.setQueryData(
-        certificationKeys.detail(
-          Array.isArray(newScholarship.payload.certification)
-            ? newScholarship.payload.certification[0]?.id || ""
-            : newScholarship.payload.certification.id || ""
-        ),
+        certificationKeys.detail(newScholarship.payload[0]?.id || ""),
         newScholarship
       );
 

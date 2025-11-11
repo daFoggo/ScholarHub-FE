@@ -15,7 +15,7 @@ export const useGetPersonal = () => {
     queryKey: personalKeys.list(),
     queryFn: async () => {
       const response = await personalService.getPersonal();
-      return response.payload.personal;
+      return response.payload;
     },
     staleTime: STALE_TIME,
     gcTime: GC_TIME,
@@ -29,7 +29,7 @@ export const usePostPersonal = () => {
     onSuccess: (newPersonal) => {
       queryClient.setQueryData(
         personalKeys.detail(
-          newPersonal.payload.personal.contact_email || ""
+          newPersonal.payload.contact_email || ""
         ),
         newPersonal
       );
@@ -47,10 +47,9 @@ export const usePutPersonal = () => {
   return useMutation({
     mutationFn: (data: IPersonalDTO) => personalService.putPersonal(data),
     onSuccess: (newPersonal) => {
-      console.log("Updated personal data:", newPersonal);
       queryClient.setQueryData(
         personalKeys.detail(
-          newPersonal.payload.personal.contact_email || ""
+          newPersonal.payload.contact_email || ""
         ),
         newPersonal
       );

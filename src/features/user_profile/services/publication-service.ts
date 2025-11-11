@@ -4,9 +4,7 @@ import { USER_PROFILE_ENDPOINTS } from "./endpoints";
 
 export interface IPublicationResponse {
   success: boolean;
-  payload: {
-    publication: IPublication[] | IPublication;
-  };
+  payload: IPublication[];
 }
 
 export interface IPublicationDTO extends Omit<IPublication, "id"> {}

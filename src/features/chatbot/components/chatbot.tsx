@@ -32,10 +32,9 @@ export function Chatbot({ userId, initialThreadId }: IChatbotProps) {
     if (!userId) return;
     try {
       const newThreadId = await createNewThread({ user_id: userId });
-      console.log("New thread created with ID:", newThreadId);
+    
 
       if (newThreadId) {
-        console.log("Navigating to new thread:", newThreadId);
         // Cập nhật state trước khi navigate
         setActiveThreadId(newThreadId);
 

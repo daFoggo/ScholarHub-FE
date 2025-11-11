@@ -10,19 +10,16 @@ import type { IPublication } from "../utils/types";
 export const publicationKeys = {
   all: ["publication"] as const,
   lists: () => [...publicationKeys.all, "list"] as const,
-  list: () => [...publicationKeys.lists(), "list"] as const,
   details: () => [...publicationKeys.all, "detail"] as const,
   detail: (id: string) => [...publicationKeys.details(), id] as const,
 };
 
 export const useGetPublication = () => {
   return useQuery({
-    queryKey: publicationKeys.list(),
+    queryKey: publicationKeys.lists(),
     queryFn: async () => {
       const response = await publicationService.getPublication();
-      // @ts-ignore
-      const publications = response.payload[1]
-      return publications;
+      return response.payload;
     },
     staleTime: STALE_TIME,
     gcTime: GC_TIME,

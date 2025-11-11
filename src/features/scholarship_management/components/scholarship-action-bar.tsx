@@ -20,7 +20,6 @@ export const ScholarshipActionBar = ({ table }: IScholarshipActionBarProps) => {
                     size="icon"
                     tooltip="Delete scholarships"
                     isPending={false}
-                    onClick={() => console.log("Delete scholarships")}
                     variant="secondary"
                     className="bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 border-red-200 dark:border-red-900"
                 >

@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
   };
 
   const checkCurrentUser = (userId: string): boolean => {
-    return user?.id === userId;
+    return user?.id.toString() === userId.toString();
   };
 
   const clearError = () => setError(null);

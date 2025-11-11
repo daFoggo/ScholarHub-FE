@@ -79,13 +79,10 @@ export const useNewThread = () => {
 
   return useMutation({
     mutationFn: async (threadData: IThreadDTO) => {
-      console.log("Creating thread with data:", threadData);
       const response = await chatbotService.newThread(threadData);
-      console.log("Thread creation response:", response);
       return response.payload.thread_id;
     },
     onSuccess: (newThreadId, variables) => {
-      console.log("Thread created successfully:", newThreadId);
 
       // Tạo thread object với đúng structure
       const newThread = {
@@ -189,9 +186,7 @@ export const useThreadsList = (params: IThreadDTO) => {
   return useQuery({
     queryKey: chatbotKeys.threadsList(user_id),
     queryFn: async () => {
-      console.log("Fetching threads for user:", user_id);
       const response = await chatbotService.threadsList();
-      console.log("Threads response:", response);
       return response.payload.threads;
     },
     enabled: !!user_id,

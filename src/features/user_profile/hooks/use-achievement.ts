@@ -19,7 +19,7 @@ export const useGetAchievement = () => {
     queryKey: achievementKeys.list(),
     queryFn: async () => {
       const response = await achievementService.getAchievement();
-      return response.payload.achievement;
+      return response.payload;
     },
     staleTime: STALE_TIME,
     gcTime: GC_TIME,
@@ -34,11 +34,7 @@ export const usePostAchievement = () => {
     onSuccess: (newScholarship) => {
       // Update the cache with the new scholarship data
       queryClient.setQueryData(
-        achievementKeys.detail(
-          Array.isArray(newScholarship.payload.achievement)
-            ? newScholarship.payload.achievement[0]?.id || ""
-            : newScholarship.payload.achievement.id || ""
-        ),
+        achievementKeys.detail(newScholarship.payload[0]?.id || ""),
         newScholarship
       );
 
@@ -57,11 +53,7 @@ export const usePutAchievement = () => {
     onSuccess: (newScholarship) => {
       // Update the cache with the new scholarship data
       queryClient.setQueryData(
-        achievementKeys.detail(
-          Array.isArray(newScholarship.payload.achievement)
-            ? newScholarship.payload.achievement[0]?.id || ""
-            : newScholarship.payload.achievement.id || ""
-        ),
+        achievementKeys.detail(newScholarship.payload[0]?.id || ""),
         newScholarship
       );
 

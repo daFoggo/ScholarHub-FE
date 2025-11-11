@@ -31,7 +31,7 @@ export const useGetCurrentUser = (
     queryFn: async () => {
       const response = await authService.getCurrentUser();
       if (response.success) {
-        const userData = response.payload.user;
+        const userData = response.payload;
         saveUserData(userData, setUser);
         return userData;
       }
@@ -52,8 +52,8 @@ export const useLogin = (
     onSuccess: async () => {
       setError(null);
       const userResponse = await authService.getCurrentUser();
-      if (userResponse.success) {
-        saveUserData(userResponse.payload.user, setUser);
+      if (userResponse) {
+        saveUserData(userResponse.payload, setUser);
         toast.success("Login successful");
       } else {
         //@ts-ignore

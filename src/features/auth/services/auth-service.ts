@@ -9,13 +9,9 @@ import {
 } from "@/utils/endpoints";
 
 export interface ILoginResponse {
-  success: boolean;
-  message: string;
-  payload: {
     access_token: string;
     refresh_token: string;
     token_type: string;
-  };
 }
 
 export interface IRegisterResponse {
@@ -39,9 +35,7 @@ export interface IRefreshTokenResponse {
 export interface IUserResponse {
   success: boolean;
   message: string;
-  payload: {
-    user: IUser;
-  };
+  payload: IUser;
 }
 
 export interface IAuthCheckResponse {
@@ -77,7 +71,7 @@ export const authService = {
         success: true,
         payload: {
           isAuthenticated: true,
-          user: response.payload.user,
+          user: response.payload,
         },
       };
     } catch (error) {
@@ -102,20 +96,20 @@ export const authService = {
     const response = await fetch(`${BACKEND_API}${LOGIN_API}`, {
       method: "POST",
       body: formData,
-    });
+    }).then((res) => res.json());
 
-    const data = await response.json();
+    console.log("Login response:", response);
 
     if (
-      data.payload &&
-      data.payload.access_token &&
-      data.payload.refresh_token
+      response &&
+      response.access_token &&
+      response.refresh_token
     ) {
-      const { access_token, refresh_token } = data.payload;
+      const { access_token, refresh_token } = response;
       authTokenManagement.setTokens(access_token, refresh_token);
     }
 
-    return data;
+    return response;
   },
 
   register: async (userData: {

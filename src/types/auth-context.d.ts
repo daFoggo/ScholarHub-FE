@@ -7,7 +7,7 @@ export interface IAuthContextType {
   isAuthenticated: boolean;
   checkCurrentUser: (userId: string) => boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; user?: IUser; error?: string }>;
+  login: (email: string, password: string) => any;
   logout: () => Promise<{ success: boolean; error?: string }>;
   register: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   getCurrentUser: () => Promise<IUser, Error>;

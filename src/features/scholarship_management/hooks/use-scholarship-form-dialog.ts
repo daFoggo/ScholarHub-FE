@@ -18,7 +18,7 @@ const formSchema = z.object({
   major: z.string().optional(),
   deadline: z.string().optional(),
   description: z.string().optional(),
-  original_url: z.string().optional(),
+  original_url: z.string().nullable().optional(),
   posted_at: z.string().optional(),
 
   education_criteria: z.string(),
@@ -65,7 +65,7 @@ export const useScholarshipFormDialog = () => {
       major: "",
       deadline: undefined,
       description: "",
-      original_url: "",
+      original_url: null,
       posted_at: undefined,
 
       education_criteria: "",
@@ -184,7 +184,7 @@ export const useScholarshipFormDialog = () => {
         major: "",
         deadline: undefined,
         description: "",
-        original_url: "",
+        original_url: null,
         posted_at: undefined,
 
         education_criteria: "",

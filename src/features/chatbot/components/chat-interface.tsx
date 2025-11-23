@@ -115,14 +115,14 @@ export function ChatInterface({
       <div className="flex flex-col h-full">
         <div className="flex flex-1 justify-center items-center p-8">
           <div className="max-w-xl text-center">
-            <div className="bg-gradient-to-br from-primary/10 to-primary/20 shadow-lg mx-auto mb-6 p-6 rounded-full w-fit">
+            <div className="bg-linear-to-br from-primary/10 to-primary/20 shadow-lg mx-auto mb-6 p-6 rounded-full w-fit">
               <Sparkles className="w-12 h-12 text-primary" />
             </div>
 
             <h2 className="mb-3 font-semibold text-2xl tracking-tight">
               {hasThreads
                 ? "Select a conversation"
-                : `Welcome, ${personalData?.last_name || "Scholar"}!`}
+                : `Welcome, ${personalData?.last_name || "User"}!`}
             </h2>
 
             <p className="mb-6 text-muted-foreground leading-relaxed">
@@ -217,7 +217,7 @@ export function ChatInterface({
               onKeyDown={handleKeyDown}
               placeholder="Ask about scholarships, applications, or academic guidance..."
               className={cn(
-                "w-full resize-none rounded-xl border border-input bg-background/50 backdrop-blur-sm px-4 py-3 pr-12 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 shadow-sm",
+                "bg-background/50 disabled:opacity-50 shadow-sm backdrop-blur-sm px-4 py-3 pr-12 border border-input rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ring-offset-background focus-visible:ring-offset-2 w-full placeholder:text-muted-foreground text-sm resize-none disabled:cursor-not-allowed",
                 "min-h-[52px] max-h-[200px] transition-all duration-200"
               )}
               disabled={isSubmitting}

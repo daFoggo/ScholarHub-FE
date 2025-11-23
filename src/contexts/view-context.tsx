@@ -18,7 +18,7 @@ export function ViewProvider({ children }: { children: React.ReactNode }) {
 
 export function useView() {
   const context = useContext(ViewContext)
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useView must be used within a ViewProvider")
   }
   return context

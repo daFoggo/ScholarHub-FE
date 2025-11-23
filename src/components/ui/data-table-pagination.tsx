@@ -16,7 +16,7 @@ export function DataTablePagination<TData>({
   totalCount,
   manualPagination = false
 }: DataTablePaginationProps<TData>) {
-  const totalRows = manualPagination && totalCount !== undefined
+  const totalRows = manualPagination && totalCount 
     ? totalCount
     : table.getFilteredRowModel().rows.length
 

@@ -44,7 +44,7 @@ export const ScholarshipSearch = () => {
   const [isPendingTransition, startTransition] = useTransition();
   const isMobile = useMediaQuery("(max-width: 767px)");
   const ITEMS_PER_PAGE = 20;
-  const RECOMMENDATION_LIMIT = 20;
+  const RECOMMENDATION_LIMIT = 50;
 
   const buildSearchQuery = useCallback(
     (textQuery: string, filters: FilterOption[]) => {

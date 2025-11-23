@@ -51,7 +51,7 @@ export function ScholarshipDetailsDialog({
   };
 
   const MatchScoreBadge =
-    showMatchScore && scholarship.matchScore !== undefined ? (
+    showMatchScore && scholarship.matchScore? (
       <Badge
         className={`${matchBadgeColor} hover:${matchBadgeColor}/90 border-0 select-none text-xs whitespace-nowrap flex items-center gap-1`}
       >

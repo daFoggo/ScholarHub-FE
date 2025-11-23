@@ -111,14 +111,14 @@ const EducationSection = ({ isCurrentUser }: IEducationSectionProps) => {
           </p>
 
           <div className="flex flex-wrap gap-2 sm:gap-4 mt-1 text-muted-foreground/70 text-sm">
-            {education.current_study_year !== undefined && (
+            {education.current_study_year && (
               <p>Current Year: {education.current_study_year}</p>
             )}
-            {education.graduation_year !== undefined && (
+            {education.graduation_year && (
               <p>Graduated: {education.graduation_year}</p>
             )}
-            {education.gpa !== undefined && (
-              <p className="text-primary">GPA: {education.gpa.toFixed(2)}</p>
+            {education?.gpa && (
+              <p className="text-primary">GPA: {education?.gpa.toFixed(2)}</p>
             )}
           </div>
         </div>

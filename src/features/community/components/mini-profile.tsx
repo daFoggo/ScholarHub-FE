@@ -173,7 +173,7 @@ const MiniProfile = ({
                 </div>
                 {item.loading ? (
                   <div className="border-primary border-b-2 rounded-full w-3 h-3 animate-spin"></div>
-                ) : item.count !== undefined && item.count > 0 ? (
+                ) : item.count && item.count > 0 ? (
                   <Badge variant="secondary" className="text-xs">
                     {item.count}
                   </Badge>

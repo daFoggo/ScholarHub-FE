@@ -793,7 +793,7 @@ const FileUploadDropzone = React.forwardRef<
       {...dropzoneProps}
       ref={forwardedRef}
       className={cn(
-        "relative flex select-none flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-6 outline-none transition-colors hover:bg-accent/30 focus-visible:border-ring/50 data-[disabled]:pointer-events-none data-[dragging]:border-primary data-[invalid]:border-destructive data-[invalid]:ring-destructive/20",
+        "relative flex flex-col justify-center items-center gap-2 hover:bg-accent/30 p-6 border-2 data-[dragging]:border-primary data-[invalid]:border-destructive focus-visible:border-ring/50 border-dashed rounded-lg outline-none data-[invalid]:ring-destructive/20 transition-colors data-[disabled]:pointer-events-none select-none",
         className,
       )}
       onClick={onClick}
@@ -886,7 +886,7 @@ const FileUploadList = React.forwardRef<HTMLDivElement, FileUploadListProps>(
         {...listProps}
         ref={forwardedRef}
         className={cn(
-          "data-[state=inactive]:fade-out-0 data-[state=active]:fade-in-0 data-[state=inactive]:slide-out-to-top-2 data-[state=active]:slide-in-from-top-2 flex flex-col gap-2 data-[state=active]:animate-in data-[state=inactive]:animate-out",
+          "data-[state=inactive]:slide-out-to-top-2 flex flex-col gap-2 data-[state=active]:slide-in-from-top-2 data-[state=active]:animate-in data-[state=inactive]:animate-out data-[state=inactive]:fade-out-0 data-[state=active]:fade-in-0",
           orientation === "horizontal" && "flex-row overflow-x-auto p-1.5",
           className,
         )}
@@ -979,7 +979,7 @@ const FileUploadItem = React.forwardRef<HTMLDivElement, FileUploadItemProps>(
           {...itemProps}
           ref={forwardedRef}
           className={cn(
-            "relative flex items-center gap-2.5 rounded-md border p-3",
+            "relative flex items-center gap-2.5 p-3 border rounded-md",
             className,
           )}
         >
@@ -1104,7 +1104,7 @@ const FileUploadItemPreview = React.forwardRef<
       {...previewProps}
       ref={forwardedRef}
       className={cn(
-        "relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded border bg-accent/50 [&>svg]:size-10",
+        "relative flex justify-center items-center bg-accent/50 border rounded size-10 [&>svg]:size-10 overflow-hidden shrink-0",
         className,
       )}
     >
@@ -1146,14 +1146,14 @@ const FileUploadItemMetadata = React.forwardRef<
       dir={context.dir}
       {...metadataProps}
       ref={forwardedRef}
-      className={cn("flex min-w-0 flex-1 flex-col", className)}
+      className={cn("flex flex-col flex-1 min-w-0", className)}
     >
       {children ?? (
         <>
           <span
             id={itemContext.nameId}
             className={cn(
-              "truncate font-medium text-sm",
+              "font-medium text-sm truncate",
               size === "sm" && "font-normal text-[13px] leading-snug",
             )}
           >
@@ -1162,7 +1162,7 @@ const FileUploadItemMetadata = React.forwardRef<
           <span
             id={itemContext.sizeId}
             className={cn(
-              "truncate text-muted-foreground text-xs",
+              "text-muted-foreground text-xs truncate",
               size === "sm" && "text-[11px]",
             )}
           >
@@ -1232,7 +1232,7 @@ const FileUploadItemProgress = React.forwardRef<
           {...progressProps}
           ref={forwardedRef}
           className={cn(
-            "-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2",
+            "top-1/2 left-1/2 absolute -translate-x-1/2 -translate-y-1/2",
             className,
           )}
         >
@@ -1305,12 +1305,12 @@ const FileUploadItemProgress = React.forwardRef<
           {...progressProps}
           ref={forwardedRef}
           className={cn(
-            "relative h-1.5 w-full overflow-hidden rounded-full bg-primary/20",
+            "relative bg-primary/20 rounded-full w-full h-1.5 overflow-hidden",
             className,
           )}
         >
           <div
-            className="h-full w-full flex-1 bg-primary transition-transform duration-300 ease-linear"
+            className="flex-1 bg-primary w-full h-full transition-transform duration-300 ease-linear"
             style={{
               transform: `translateX(-${100 - itemContext.fileState.progress}%)`,
             }}

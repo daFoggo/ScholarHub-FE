@@ -22,7 +22,6 @@ import { Route as AuthCommunityImport } from './routes/_auth.community'
 import { Route as AuthScholarshipManagementIndexImport } from './routes/_auth.scholarship-management/index'
 import { Route as AuthChatbotIndexImport } from './routes/_auth.chatbot/index'
 import { Route as AuthScholarshipMatchingScholarshipIdImport } from './routes/_auth.scholarship-matching.$scholarshipId'
-import { Route as AuthScholarshipManagementScholarshipIdImport } from './routes/_auth.scholarship-management/$scholarshipId'
 import { Route as AuthProfileUserIdImport } from './routes/_auth.profile.$userId'
 import { Route as AuthChatbotThreadIdImport } from './routes/_auth.chatbot/$threadId'
 
@@ -92,13 +91,6 @@ const AuthScholarshipMatchingScholarshipIdRoute =
   AuthScholarshipMatchingScholarshipIdImport.update({
     id: '/scholarship-matching/$scholarshipId',
     path: '/scholarship-matching/$scholarshipId',
-    getParentRoute: () => AuthRoute,
-  } as any)
-
-const AuthScholarshipManagementScholarshipIdRoute =
-  AuthScholarshipManagementScholarshipIdImport.update({
-    id: '/scholarship-management/$scholarshipId',
-    path: '/scholarship-management/$scholarshipId',
     getParentRoute: () => AuthRoute,
   } as any)
 
@@ -188,13 +180,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthProfileUserIdImport
       parentRoute: typeof AuthImport
     }
-    '/_auth/scholarship-management/$scholarshipId': {
-      id: '/_auth/scholarship-management/$scholarshipId'
-      path: '/scholarship-management/$scholarshipId'
-      fullPath: '/scholarship-management/$scholarshipId'
-      preLoaderRoute: typeof AuthScholarshipManagementScholarshipIdImport
-      parentRoute: typeof AuthImport
-    }
     '/_auth/scholarship-matching/$scholarshipId': {
       id: '/_auth/scholarship-matching/$scholarshipId'
       path: '/scholarship-matching/$scholarshipId'
@@ -226,7 +211,6 @@ interface AuthRouteChildren {
   AuthScholarshipSearchRoute: typeof AuthScholarshipSearchRoute
   AuthChatbotThreadIdRoute: typeof AuthChatbotThreadIdRoute
   AuthProfileUserIdRoute: typeof AuthProfileUserIdRoute
-  AuthScholarshipManagementScholarshipIdRoute: typeof AuthScholarshipManagementScholarshipIdRoute
   AuthScholarshipMatchingScholarshipIdRoute: typeof AuthScholarshipMatchingScholarshipIdRoute
   AuthChatbotIndexRoute: typeof AuthChatbotIndexRoute
   AuthScholarshipManagementIndexRoute: typeof AuthScholarshipManagementIndexRoute
@@ -237,8 +221,6 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthScholarshipSearchRoute: AuthScholarshipSearchRoute,
   AuthChatbotThreadIdRoute: AuthChatbotThreadIdRoute,
   AuthProfileUserIdRoute: AuthProfileUserIdRoute,
-  AuthScholarshipManagementScholarshipIdRoute:
-    AuthScholarshipManagementScholarshipIdRoute,
   AuthScholarshipMatchingScholarshipIdRoute:
     AuthScholarshipMatchingScholarshipIdRoute,
   AuthChatbotIndexRoute: AuthChatbotIndexRoute,
@@ -258,7 +240,6 @@ export interface FileRoutesByFullPath {
   '/auth/register': typeof AuthRegisterRoute
   '/chatbot/$threadId': typeof AuthChatbotThreadIdRoute
   '/profile/$userId': typeof AuthProfileUserIdRoute
-  '/scholarship-management/$scholarshipId': typeof AuthScholarshipManagementScholarshipIdRoute
   '/scholarship-matching/$scholarshipId': typeof AuthScholarshipMatchingScholarshipIdRoute
   '/chatbot': typeof AuthChatbotIndexRoute
   '/scholarship-management': typeof AuthScholarshipManagementIndexRoute
@@ -275,7 +256,6 @@ export interface FileRoutesByTo {
   '/auth/register': typeof AuthRegisterRoute
   '/chatbot/$threadId': typeof AuthChatbotThreadIdRoute
   '/profile/$userId': typeof AuthProfileUserIdRoute
-  '/scholarship-management/$scholarshipId': typeof AuthScholarshipManagementScholarshipIdRoute
   '/scholarship-matching/$scholarshipId': typeof AuthScholarshipMatchingScholarshipIdRoute
   '/chatbot': typeof AuthChatbotIndexRoute
   '/scholarship-management': typeof AuthScholarshipManagementIndexRoute
@@ -293,7 +273,6 @@ export interface FileRoutesById {
   '/auth/register': typeof AuthRegisterRoute
   '/_auth/chatbot/$threadId': typeof AuthChatbotThreadIdRoute
   '/_auth/profile/$userId': typeof AuthProfileUserIdRoute
-  '/_auth/scholarship-management/$scholarshipId': typeof AuthScholarshipManagementScholarshipIdRoute
   '/_auth/scholarship-matching/$scholarshipId': typeof AuthScholarshipMatchingScholarshipIdRoute
   '/_auth/chatbot/': typeof AuthChatbotIndexRoute
   '/_auth/scholarship-management/': typeof AuthScholarshipManagementIndexRoute
@@ -312,7 +291,6 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/chatbot/$threadId'
     | '/profile/$userId'
-    | '/scholarship-management/$scholarshipId'
     | '/scholarship-matching/$scholarshipId'
     | '/chatbot'
     | '/scholarship-management'
@@ -328,7 +306,6 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/chatbot/$threadId'
     | '/profile/$userId'
-    | '/scholarship-management/$scholarshipId'
     | '/scholarship-matching/$scholarshipId'
     | '/chatbot'
     | '/scholarship-management'
@@ -344,7 +321,6 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/_auth/chatbot/$threadId'
     | '/_auth/profile/$userId'
-    | '/_auth/scholarship-management/$scholarshipId'
     | '/_auth/scholarship-matching/$scholarshipId'
     | '/_auth/chatbot/'
     | '/_auth/scholarship-management/'
@@ -397,7 +373,6 @@ export const routeTree = rootRoute
         "/_auth/scholarship-search",
         "/_auth/chatbot/$threadId",
         "/_auth/profile/$userId",
-        "/_auth/scholarship-management/$scholarshipId",
         "/_auth/scholarship-matching/$scholarshipId",
         "/_auth/chatbot/",
         "/_auth/scholarship-management/"
@@ -429,10 +404,6 @@ export const routeTree = rootRoute
     },
     "/_auth/profile/$userId": {
       "filePath": "_auth.profile.$userId.tsx",
-      "parent": "/_auth"
-    },
-    "/_auth/scholarship-management/$scholarshipId": {
-      "filePath": "_auth.scholarship-management/$scholarshipId.tsx",
       "parent": "/_auth"
     },
     "/_auth/scholarship-matching/$scholarshipId": {

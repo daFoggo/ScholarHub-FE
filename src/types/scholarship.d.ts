@@ -29,14 +29,7 @@ export interface IScholarship {
   certification_criteria?: string;
   achievement_criteria?: string;
 
-  weights?: {
-    "0": IScholarshipWeightCriteria;
-    "1": IScholarshipWeightCriteria;
-    "2": IScholarshipWeightCriteria;
-    "3": IScholarshipWeightCriteria;
-    "4": IScholarshipWeightCriteria;
-    "5": IScholarshipWeightCriteria;
-  };
+  weights?: Record<string, string>;
 }
 
 export type IScholarshipWeightCriteria =

@@ -1,267 +1,119 @@
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { DataTable } from "@/components/ui/data-table"
-import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
-import type { SearchableColumns } from "@/components/ui/data-table-toolbar"
+"use client";
+
+import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Link } from "@tanstack/react-router"
-import type { ColumnDef } from "@tanstack/react-table"
-import { Eye, FileUser, MoreHorizontal, PenLine, Plus, Trash2 } from "lucide-react"
-import * as React from "react"
-import { useState } from "react"
-import { useScholarshipFormDialog } from "../hooks/use-scholarship-form-dialog"
-import { useGetScholarships } from "../hooks/use-scholarship-management"
-import { ScholarshipActionBar } from "./scholarship-action-bar"
-import { ScholarshipFormDialog } from "./scholarship-form-dialog"
-import type { IScholarship } from "@/types/scholarship"
-import { truncateText } from "@/utils/functions"
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import type { IScholarship } from "@/types/scholarship";
+import { format } from "date-fns";
+import { ExternalLink, Pencil, Trash2 } from "lucide-react";
 
-export const ScholarshipTable = () => {
-  const [limit, setLimit] = useState(10)
-  const [offset, setOffset] = useState(0)
-  const { data: scholarships = [], isLoading: isLoadingScholarship } = useGetScholarships({
-    limit,
-    offset,
-  })
+interface ScholarshipTableProps {
+  scholarships?: IScholarship[] | null;
+  onEdit: (scholarship: IScholarship) => void;
+  onDelete: (id: string) => void;
+  isLoading?: boolean;
+}
 
-  const handlePageChange = (newPageIndex: number, newPageSize: number) => {
-    setLimit(newPageSize)
-    setOffset(newPageIndex * newPageSize)
+export function ScholarshipTable({
+  scholarships = [],
+  onEdit,
+  onDelete,
+  isLoading = false,
+}: ScholarshipTableProps) {
+  const data = scholarships || [];
+
+  if (data.length === 0) {
+    return (
+      <div className="py-12 text-center">
+        <p className="text-muted-foreground">
+          No scholarships found. Create one to get started.
+        </p>
+      </div>
+    );
   }
 
-  const {
-    isOpen,
-    setIsOpen,
-    formType,
-    form,
-    isSubmitting,
-    onSubmit,
-    onDelete,
-    isDeleting,
-    openDialog,
-    scholarshipId,
-  } = useScholarshipFormDialog()
-
-  const searchableColumns: SearchableColumns[] = [
-    {
-      id: "title",
-      title: "Title",
-    },
-    {
-      id: "type",
-      title: "Type",
-    },
-    {
-      id: "degree_level",
-      title: "Degree Level",
-    },
-  ]
-
-
-  const scholarshipColumns: ColumnDef<IScholarship>[] = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: "index",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="No." />,
-      cell: ({ row }) => {
-        const index = row.index + 1
-        return <span>{index}</span>
-      },
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: "id",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="ID" />,
-      cell: ({ row }) => {
-        const id = row.getValue("id") as string
-        return <span>{truncateText(id, 10)}</span>
-      },
-    },
-    {
-      accessorKey: "title",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
-      cell: ({ row }) => {
-        const title = row.getValue("title") as string
-        return <span className="font-medium">{title}</span>
-      },
-      enableSorting: true,
-    },
-    {
-      accessorKey: "type",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Type" />,
-      cell: ({ row }) => {
-        const type = row.getValue("type") as string
-        return <span>{type || "N/A"}</span>
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id))
-      },
-    },
-    {
-      accessorKey: "degree_level",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Degree Level" />,
-      cell: ({ row }) => {
-        const degreeLevel = row.getValue("degree_level") as string
-        return <span className="capitalize">{degreeLevel || "N/A"}</span>
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id))
-      },
-    },
-    {
-      accessorKey: "deadline",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Deadline" />,
-      cell: ({ row }) => {
-        const deadline = row.getValue("deadline") as string
-        return <div>{deadline ? new Date(deadline).toLocaleDateString(
-          "vi-VN",
-          {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-          }
-        ) : "N/A"}</div>
-      },
-      filterFn: (row, id, filterValue) => {
-        if (!filterValue) return true;
-        const date = row.getValue(id) as string;
-        if (!date) return false;
-
-        const { from, to } = filterValue as { from: Date; to: Date };
-        const rowDate = new Date(date);
-        return rowDate >= from && rowDate <= to;
-      },
-    },
-    {
-      accessorKey: "posted_at",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Posted At" />,
-      cell: ({ row }) => {
-        const postedAt = row.getValue("posted_at") as string
-        return <div>{postedAt ? new Date(postedAt).toLocaleDateString(
-          "vi-VN",
-          {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-          }
-        ) : "N/A"}</div>
-      },
-      filterFn: (row, id, filterValue) => {
-        if (!filterValue) return true;
-        const date = row.getValue(id) as string;
-        if (!date) return false;
-
-        const { from, to } = filterValue as { from: Date; to: Date };
-        const rowDate = new Date(date);
-        return rowDate >= from && rowDate <= to;
-      },
-      enableColumnFilter: false,
-    },
-    {
-      id: "actions",
-      cell: ({ row }) => {
-        const currentScholarship = row.original
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="p-0 size-8">
-                <MoreHorizontal className="size-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => openDialog("read", currentScholarship)}>
-                <Eye className="size-4" />View details
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link
-                  to="/scholarship-management/$scholarshipId"
-                  params={{ scholarshipId: String(currentScholarship.id)}}
-                >
-                  <FileUser className="size-4" />See applications
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem >
-                <PenLine className="size-4" />Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => openDialog("delete", currentScholarship)}>
-                <Trash2 className="size-4 text-destructive" />
-                <p className="text-destructive hover:text-destructive">Delete</p>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )
-      },
-      enablePinning: true,
-    },
-  ]
-
-  const renderActionBar = React.useCallback((table: any) => {
-    return <ScholarshipActionBar
-      table={table}
-    />
-  }, [])
-
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-end">
-        <p className="font-bold text-2xl">Scholarships Management</p>
-        <Button onClick={() => openDialog("create")}>
-          <Plus className="mr-2 size-4" /> New Scholarship
-        </Button>
-      </div>
-
-      <DataTable
-        columns={scholarshipColumns}
-        data={scholarships}
-        searchableColumns={searchableColumns}
-        renderActionBar={renderActionBar}
-        isLoading={isLoadingScholarship}
-        onPaginationChange={handlePageChange}
-        manualPagination={true}
-        pageIndex={offset / limit}
-        pageSize={limit}
-      />
-
-      <ScholarshipFormDialog
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        formType={formType}
-        form={form}
-        isSubmitting={isSubmitting}
-        isDeleting={isDeleting}
-        isLoading={false}
-        onDelete={onDelete}
-        onSubmit={onSubmit}
-        scholarshipId={scholarshipId || ""}
-      />
+    <div className="border rounded-lg overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-muted/50">
+            <TableHead>Title</TableHead>
+            <TableHead>Provider</TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead>Degree Level</TableHead>
+            <TableHead>Deadline</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.map((scholarship) => (
+            <TableRow key={scholarship.id} className="hover:bg-muted/50">
+              <TableCell className="max-w-xs font-medium truncate">
+                {scholarship.title}
+              </TableCell>
+              <TableCell>{scholarship.provider}</TableCell>
+              <TableCell>
+                {scholarship.type ? (
+                  <span className="inline-block bg-primary/10 px-2 py-1 rounded-full text-primary text-xs">
+                    {scholarship.type}
+                  </span>
+                ) : (
+                  <span className="text-muted-foreground">-</span>
+                )}
+              </TableCell>
+              <TableCell>
+                {scholarship.degree_level || (
+                  <span className="text-muted-foreground">-</span>
+                )}
+              </TableCell>
+              <TableCell>
+                {scholarship.deadline ? (
+                  format(new Date(scholarship.deadline), "MMM dd, yyyy")
+                ) : (
+                  <span className="text-muted-foreground">-</span>
+                )}
+              </TableCell>
+              <TableCell className="text-right">
+                <div className="flex justify-end gap-2">
+                  {scholarship.original_url && (
+                    <Button size="sm" variant="ghost" asChild>
+                      <a
+                        href={scholarship.original_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    </Button>
+                  )}
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => onEdit(scholarship)}
+                    disabled={isLoading}
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => onDelete(scholarship.id)}
+                    disabled={isLoading}
+                  >
+                    <Trash2 className="w-4 h-4 text-destructive" />
+                  </Button>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
-  )
+  );
 }

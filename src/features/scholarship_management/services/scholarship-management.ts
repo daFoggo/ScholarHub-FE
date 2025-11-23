@@ -1,14 +1,7 @@
 import { apiClient } from "@/lib/fetch";
 import type { IScholarship } from "@/types/scholarship";
-import { SCHOLARSHIP_MANAGE_ENDPOINTS } from "./endpoints";
 
-export interface IGetScholarshipsResponse {
-  success: boolean;
-  message: string;
-  payload: {
-    scholarships: IScholarship[];
-  };
-}
+export interface IPostScholarshipDTO extends Omit<IScholarship, "id"> {}
 
 export interface IPostScholarshipResponse {
   success: boolean;
@@ -18,39 +11,66 @@ export interface IPostScholarshipResponse {
   };
 }
 
-export interface IScholarshipQueryParams {
-  limit?: number;
-  offset?: number;
+export interface IGetMyScholarshipsResponse {
+  success: boolean;
+  message: string;
+  payload: {
+    scholarships: IScholarship[];
+  };
 }
 
-export interface IPostScholarshipDTO extends Omit<IScholarship, "id"> {}
+export interface IUpdateScholarshipDTO extends Partial<IScholarship> {
+  id: string;
+}
 
-export const scholarshipService = {
-  getScholarships: async (
-    params: IScholarshipQueryParams
-  ): Promise<IGetScholarshipsResponse> => {
-    const response = await apiClient.get(
-      `${SCHOLARSHIP_MANAGE_ENDPOINTS.GET_SCHOLARSHIPS}?limit=${params.limit}&offset=${params.offset}`
-    );
-    return response as IGetScholarshipsResponse;
-  },
+export interface IUpdateScholarshipResponse {
+  success: boolean;
+  message: string;
+  payload: {
+    scholarship: IScholarship;
+  };
+}
 
-  postScolarship: async (
+export interface IDeleteScholarshipResponse {
+  success: boolean;
+  message: string;
+}
+
+import { SCHOLARSHIP_MANAGEMENT_ENDPOINTS } from "./endpoints";
+
+export const scholarshipManagementServices = {
+  createScholarship: async (
     payload: IPostScholarshipDTO
   ): Promise<IPostScholarshipResponse> => {
     const response = await apiClient.post(
-      SCHOLARSHIP_MANAGE_ENDPOINTS.POST_SCHOLARSHIP,
+      SCHOLARSHIP_MANAGEMENT_ENDPOINTS.DEFAULT,
       payload
     );
     return response as IPostScholarshipResponse;
   },
 
-  deleteScholarship: async (
-    scholarshipId: string
-  ): Promise<{ success: boolean; message: string }> => {
-    const response = await apiClient.delete(
-      `${SCHOLARSHIP_MANAGE_ENDPOINTS.DELETE_SCHOLARSHIP}?id=${scholarshipId}`
+  getMyScholarships: async (): Promise<IGetMyScholarshipsResponse> => {
+    const response = await apiClient.get(SCHOLARSHIP_MANAGEMENT_ENDPOINTS.ME);
+    return response as IGetMyScholarshipsResponse;
+  },
+
+  updateScholarship: async (
+    payload: IUpdateScholarshipDTO
+  ): Promise<IUpdateScholarshipResponse> => {
+    const { id, ...data } = payload;
+    const response = await apiClient.put(
+      `${SCHOLARSHIP_MANAGEMENT_ENDPOINTS.DEFAULT}/${id}`,
+      data
     );
-    return response as { success: boolean; message: string };
+    return response as IUpdateScholarshipResponse;
+  },
+
+  deleteScholarship: async (
+    id: string
+  ): Promise<IDeleteScholarshipResponse> => {
+    const response = await apiClient.delete(
+      `${SCHOLARSHIP_MANAGEMENT_ENDPOINTS.DEFAULT}/${id}`
+    );
+    return response as IDeleteScholarshipResponse;
   },
 };

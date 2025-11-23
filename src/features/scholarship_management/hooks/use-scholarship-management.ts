@@ -1,36 +1,25 @@
 import { GC_TIME, STALE_TIME } from "@/utils/constants";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  scholarshipService,
-  type IPostScholarshipDTO,
-  type IScholarshipQueryParams,
+import { toast } from "sonner";
+import type {
+  IPostScholarshipDTO,
+  IUpdateScholarshipDTO,
 } from "../services/scholarship-management";
+import { scholarshipManagementServices } from "../services/scholarship-management";
 
-export const scholarshipKeys = {
-  all: ["scholarshipsManagement"] as const,
-  lists: () => [...scholarshipKeys.all, "list"] as const,
-  list: (filters: IScholarshipQueryParams) =>
-    [
-      ...scholarshipKeys.lists(),
-      {
-        limit: filters.limit,
-        offset: filters.offset,
-      },
-    ] as const,
-  details: () => [...scholarshipKeys.all, "detail"] as const,
-  detail: (id: string) => [...scholarshipKeys.details(), id] as const,
+export const scholarshipManagementKeys = {
+  all: ["scholarshipManagement"] as const,
+  lists: () => [...scholarshipManagementKeys.all, "list"] as const,
+  myList: () => [...scholarshipManagementKeys.lists(), "me"] as const,
+  details: () => [...scholarshipManagementKeys.all, "detail"] as const,
+  detail: (id: string) => [...scholarshipManagementKeys.details(), id] as const,
 };
 
-export const useGetScholarships = (params: IScholarshipQueryParams) => {
-  const { limit = 10, offset = 0 } = params;
-
+export const useGetMyScholarships = () => {
   return useQuery({
-    queryKey: scholarshipKeys.list(params),
+    queryKey: scholarshipManagementKeys.myList(),
     queryFn: async () => {
-      const response = await scholarshipService.getScholarships({
-        limit,
-        offset,
-      });
+      const response = await scholarshipManagementServices.getMyScholarships();
       return response.payload.scholarships;
     },
     staleTime: STALE_TIME,
@@ -38,22 +27,39 @@ export const useGetScholarships = (params: IScholarshipQueryParams) => {
   });
 };
 
-export const usePostScholarship = () => {
+export const useCreateScholarship = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: IPostScholarshipDTO) =>
-      scholarshipService.postScolarship(data),
-    onSuccess: (newScholarship) => {
-      // Update the cache with the new scholarship data
-      queryClient.setQueryData(
-        scholarshipKeys.detail(newScholarship.payload.scholarship.id),
-        newScholarship
-      );
-
-      // Invalidate the list query to ensure it reflects the new data
+    mutationFn: (payload: IPostScholarshipDTO) =>
+      scholarshipManagementServices.createScholarship(payload),
+    onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: scholarshipKeys.lists(),
+        queryKey: scholarshipManagementKeys.myList(),
       });
+      toast.success(data.message || "Scholarship created successfully");
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to create scholarship");
+    },
+  });
+};
+
+export const useUpdateScholarship = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: IUpdateScholarshipDTO) =>
+      scholarshipManagementServices.updateScholarship(payload),
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: scholarshipManagementKeys.myList(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: scholarshipManagementKeys.detail(variables.id),
+      });
+      toast.success(data.message || "Scholarship updated successfully");
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to update scholarship");
     },
   });
 };
@@ -61,18 +67,16 @@ export const usePostScholarship = () => {
 export const useDeleteScholarship = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (scholarshipId: string) =>
-      scholarshipService.deleteScholarship(scholarshipId),
-    onSuccess: (_response, scholarshipId) => {
-      // Invalidate the list query to ensure it reflects the new data
+    mutationFn: (id: string) =>
+      scholarshipManagementServices.deleteScholarship(id),
+    onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: scholarshipKeys.lists(),
+        queryKey: scholarshipManagementKeys.myList(),
       });
-
-      // Optionally, remove the specific scholarship from the cache
-      queryClient.removeQueries({
-        queryKey: scholarshipKeys.detail(scholarshipId),
-      });
+      toast.success(data.message || "Scholarship deleted successfully");
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to delete scholarship");
     },
   });
 };

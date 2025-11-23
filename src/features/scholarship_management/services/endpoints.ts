@@ -1,5 +1,4 @@
-export const SCHOLARSHIP_MANAGE_ENDPOINTS = {
-  GET_SCHOLARSHIPS: `/manage-scholarships`,
-  POST_SCHOLARSHIP: `/post-scholarship`,
-  DELETE_SCHOLARSHIP: `/manage-scholarships`,
-};
+export const SCHOLARSHIP_MANAGEMENT_ENDPOINTS = {
+  DEFAULT: `/scholarships`,
+  ME: `/scholarships/me`,
+}

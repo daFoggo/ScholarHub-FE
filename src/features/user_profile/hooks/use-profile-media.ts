@@ -1,3 +1,4 @@
+import { authKeys } from "@/features/auth/hooks/use-auth-mutations";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
@@ -31,6 +32,7 @@ export const useUploadProfileMedia = () => {
 
       queryClient.invalidateQueries({ queryKey: personalKeys.all });
       queryClient.invalidateQueries({ queryKey: personalKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: authKeys.user() });
     },
     onError: (error) => {
       const errorMessage =

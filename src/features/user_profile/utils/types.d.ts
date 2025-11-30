@@ -27,6 +27,8 @@ export interface IUserProfile {
   publications?: IPublication[];
   documents?: IDocument[];
   references?: IReference[];
+  wallet_address?: string | null;
+  spt_balance?: number;
 }
 
 export interface IPersonalInfo

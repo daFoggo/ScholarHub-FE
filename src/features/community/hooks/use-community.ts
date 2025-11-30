@@ -5,6 +5,8 @@ import {
   type ICreatePostRequest,
 } from "../services/community";
 import type { IConnection, IPost } from "../utils/types";
+import { personalKeys } from "@/features/user_profile/hooks/use-personal";
+// import { toast } from "sonner";
 
 export const communityKeys = {
   all: ["community"] as const,
@@ -175,6 +177,10 @@ export const useToggleReaction = () => {
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: communityKeys.postsList() });
       queryClient.invalidateQueries({ queryKey: communityKeys.savedPosts() });
+
+      // Refresh balance and show toast
+      queryClient.invalidateQueries({ queryKey: personalKeys.all });
+      // toast.success("Reaction recorded! Reward received."); // Optional: Debounce or remove if too spammy
     },
   });
 };

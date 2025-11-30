@@ -17,7 +17,7 @@ const MainNav = () => {
             key={item.href}
             to={item.href}
             className={cn(
-              "transition-colors hover:text-foreground/80 font-medium",
+              "font-medium hover:text-foreground/80 transition-colors",
               pathName === item.href ? "text-foreground" : "text-foreground/80"
             )}
           >

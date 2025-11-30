@@ -13,7 +13,7 @@ export const MarkdownPreview = ({
 }: MarkdownPreviewProps) => {
   return (
     <div
-      className={cn("prose prose-sm dark:prose-invert max-w-none", className)}
+      className={cn("dark:prose-invert max-w-none prose prose-sm", className)}
     >
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}

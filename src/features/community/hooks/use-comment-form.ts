@@ -1,8 +1,12 @@
 import { useState } from "react";
 import type { IComment } from "../utils/types";
 import { useCreateComment, useToggleCommentReaction } from "./use-comment";
+import { personalKeys } from "@/features/user_profile/hooks/use-personal";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export const useCommentForm = (postId: string) => {
+  const queryClient = useQueryClient();
   const [newComment, setNewComment] = useState("");
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState("");
@@ -14,11 +18,17 @@ export const useCommentForm = (postId: string) => {
     if (!newComment.trim()) return;
 
     try {
-      await createCommentMutation.mutateAsync({
+      const response = await createCommentMutation.mutateAsync({
         postId,
         data: { content: newComment },
       });
       setNewComment("");
+
+      // Refresh balance and show toast
+      queryClient.invalidateQueries({ queryKey: personalKeys.all });
+
+      const message = response.message || "Comment added! Reward received.";
+      toast.success(message);
     } catch (err) {
       console.error("Error creating comment:", err);
     }
@@ -46,15 +56,21 @@ export const useCommentForm = (postId: string) => {
     if (!replyContent.trim() || !replyingTo) return;
 
     try {
-      await createCommentMutation.mutateAsync({
+      const response = await createCommentMutation.mutateAsync({
         postId,
-        data: { 
+        data: {
           content: replyContent,
-          parent_id: replyingTo 
+          parent_id: replyingTo,
         },
       });
       setReplyContent("");
       setReplyingTo(null);
+
+      // Refresh balance and show toast
+      queryClient.invalidateQueries({ queryKey: personalKeys.all });
+
+      const message = response.message || "Reply added! Reward received.";
+      toast.success(message);
     } catch (err) {
       console.error("Error creating reply:", err);
       throw err;

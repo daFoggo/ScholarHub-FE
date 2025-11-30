@@ -34,4 +34,9 @@ export const personalService = {
     const response = await apiClient.delete(USER_PROFILE_ENDPOINTS.PERSONAL);
     return response as IPersonalResponse;
   },
+
+  createWallet: async (): Promise<IPersonalResponse> => {
+    const response = await apiClient.post("/user/wallet", {});
+    return response as IPersonalResponse;
+  },
 };

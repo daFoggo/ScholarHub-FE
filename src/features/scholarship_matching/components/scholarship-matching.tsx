@@ -44,6 +44,7 @@ export const ScholarshipMatching = ({
     mutate: postScholarshipMatching,
     isPending,
     isError,
+    error,
     data: evaluateData,
   } = usePostScholarshipMatching();
 
@@ -76,17 +77,30 @@ export const ScholarshipMatching = ({
   }
 
   if (isError) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const errorStatus = (error as any)?.response?.status;
+
+    let errorTitle = "Error Loading Match Data";
+    let errorMessage = "An unexpected error occurred. Please try again.";
+
+    if (errorStatus === 402) {
+      errorTitle = "Insufficient SPT Balance";
+      errorMessage = "You do not have enough SPT to perform this action.";
+    } else if (errorStatus === 400) {
+      errorTitle = "Wallet Required";
+      errorMessage =
+        "Please create a blockchain wallet before using this service.";
+    }
+
     return (
       <Card className="bg-destructive/10 shadow-md p-6 border-destructive text-center">
         <CardHeader>
           <CardTitle className="text-destructive text-2xl">
-            Error Loading Match Data
+            {errorTitle}
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">
-            An unexpected error occurred. Please try again.
-          </p>
+          <p className="text-muted-foreground">{errorMessage}</p>
           <Button
             variant="outline"
             className="mt-4"

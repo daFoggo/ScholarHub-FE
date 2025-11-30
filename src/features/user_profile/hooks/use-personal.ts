@@ -1,6 +1,10 @@
 import { GC_TIME, STALE_TIME } from "@/utils/constants";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { personalService, type IPersonalDTO } from "../services/personal-service";
+import { toast } from "sonner";
+import {
+  personalService,
+  type IPersonalDTO,
+} from "../services/personal-service";
 
 export const personalKeys = {
   all: ["personal"] as const,
@@ -28,9 +32,7 @@ export const usePostPersonal = () => {
     mutationFn: (data: IPersonalDTO) => personalService.postPersonal(data),
     onSuccess: (newPersonal) => {
       queryClient.setQueryData(
-        personalKeys.detail(
-          newPersonal.payload.contact_email || ""
-        ),
+        personalKeys.detail(newPersonal.payload.contact_email || ""),
         newPersonal
       );
 
@@ -48,9 +50,7 @@ export const usePutPersonal = () => {
     mutationFn: (data: IPersonalDTO) => personalService.putPersonal(data),
     onSuccess: (newPersonal) => {
       queryClient.setQueryData(
-        personalKeys.detail(
-          newPersonal.payload.contact_email || ""
-        ),
+        personalKeys.detail(newPersonal.payload.contact_email || ""),
         newPersonal
       );
 
@@ -62,3 +62,18 @@ export const usePutPersonal = () => {
   });
 };
 
+export const useCreateWallet = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => personalService.createWallet(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: personalKeys.all,
+      });
+      toast.success("Wallet created successfully!");
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to create wallet");
+    },
+  });
+};

@@ -5,7 +5,7 @@ import React from "react"
 import { cn } from "@/lib/utils"
 
 const headingVariants = cva(
-    "tracking-tight pb-3 bg-clip-text text-transparent",
+    "bg-clip-text pb-3 text-transparent tracking-tight",
     {
         variants: {
             variant: {

@@ -2,8 +2,12 @@ import { useRef, useState } from "react";
 import { useCreatePost } from "./use-community";
 import { useUploadMultipleFiles } from "./use-upload-file";
 import type { IAttachments } from "../utils/types";
+import { personalKeys } from "@/features/user_profile/hooks/use-personal";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export const usePostCreator = (onCreatePost?: (post: any) => void) => {
+  const queryClient = useQueryClient();
   const [content, setContent] = useState("");
   const [attachments, setAttachments] = useState<IAttachments>({
     images: [],
@@ -82,6 +86,12 @@ export const usePostCreator = (onCreatePost?: (post: any) => void) => {
       const response = await createPostMutation.mutateAsync(postData);
       resetForm();
       onCreatePost?.(response.payload.post);
+
+      // Refresh balance and show toast
+      queryClient.invalidateQueries({ queryKey: personalKeys.all });
+
+      const message = response.message || "Post created! Reward received.";
+      toast.success(message);
     } catch (error) {
       alert("Failed to create post");
     }

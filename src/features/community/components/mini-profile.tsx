@@ -9,16 +9,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useGetPersonal, type IUserProfile } from "@/features/user_profile";
+import {
+  useCreateWallet,
+  useGetPersonal,
+  type IUserProfile,
+} from "@/features/user_profile";
 import type { IUser } from "@/types/user";
 import { BACKEND_IP } from "@/utils/endpoints";
 import { useNavigate } from "@tanstack/react-router";
 import {
   ArrowUpRight,
   Bookmark,
+  Coins,
+  Copy,
   GraduationCap,
   Navigation,
   Users,
+  Wallet,
 } from "lucide-react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useGetSavedPostsCount } from "../hooks/use-community";
@@ -35,7 +42,8 @@ const MiniProfile = ({
   currentView: "feed" | "saved";
 }) => {
   const navigate = useNavigate();
-  const { data: personalData} = useGetPersonal();
+  const { data: personalData } = useGetPersonal();
+  const { mutate: createWallet, isPending: isCreating } = useCreateWallet();
 
   const {
     data: savedPostsCount = 0,
@@ -122,6 +130,50 @@ const MiniProfile = ({
             </p>
             <div className="flex sm:flex-row flex-col sm:items-center gap-1 sm:gap-3 text-muted-foreground">
               <Badge className="w-fit">{profile.job_title}</Badge>
+            </div>
+
+            {/* Blockchain Info */}
+            <div className="space-y-2 mt-4 pt-4 border-t">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-sm">
+                  <Coins className="size-4 text-yellow-500" />
+                  <span className="font-medium">
+                    {personalData?.spt_balance?.toLocaleString() || 0} SPT
+                  </span>
+                </div>
+              </div>
+
+              {!personalData?.wallet_address ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full h-7 text-xs"
+                  onClick={() => createWallet()}
+                  disabled={isCreating}
+                >
+                  {isCreating ? "Creating..." : "Create Wallet"}
+                </Button>
+              ) : (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted/50 p-1.5 rounded-md">
+                  <Wallet className="size-3.5 shrink-0" />
+                  <span className="flex-1 font-mono truncate">
+                    {`${personalData.wallet_address.slice(
+                      0,
+                      6
+                    )}...${personalData.wallet_address.slice(-4)}`}
+                  </span>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+                        personalData.wallet_address || ""
+                      );
+                    }}
+                    className="hover:text-foreground transition-colors"
+                  >
+                    <Copy className="size-3.5" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </CardContent>

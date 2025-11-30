@@ -52,7 +52,7 @@ export const SearchSection = () => {
                                         key={`mobile-${step.id}`}
                                         onClick={() => setActiveStep(step.id)}
                                         className={cn(
-                                            "flex items-center gap-2 whitespace-nowrap px-3 py-2 rounded-full text-sm font-medium transition-colors",
+                                            "flex items-center gap-2 px-3 py-2 rounded-full font-medium text-sm whitespace-nowrap transition-colors",
                                             activeStep === step.id
                                                 ? "bg-primary text-primary-foreground"
                                                 : "bg-primary/10 text-primary hover:bg-primary/20",
@@ -70,7 +70,7 @@ export const SearchSection = () => {
                                     <div
                                         key={`mobile-img-${step.id}`}
                                         className={cn(
-                                            "absolute inset-0 transition-opacity duration-500 p-4",
+                                            "absolute inset-0 p-4 transition-opacity duration-500",
                                             activeStep === step.id ? "opacity-100" : "opacity-0 pointer-events-none",
                                         )}
                                     >
@@ -95,7 +95,7 @@ export const SearchSection = () => {
                                         key={step.id}
                                         onClick={() => setActiveStep(step.id)}
                                         className={cn(
-                                            "transition-all duration-300 space-y-2 p-2 cursor-pointer",
+                                            "space-y-2 p-2 transition-all duration-300 cursor-pointer",
                                             activeStep === step.id
                                                 ? "bg-primary/5 -mx-2 sm:-mx-4 px-2 sm:px-4 rounded-lg"
                                                 : "hover:bg-primary/5 -mx-2 sm:-mx-4 px-2 sm:px-4 rounded-lg",
@@ -121,7 +121,7 @@ export const SearchSection = () => {
                                     <div
                                         key={`desktop-img-${step.id}`}
                                         className={cn(
-                                            "absolute inset-0 transition-opacity duration-500 p-4",
+                                            "absolute inset-0 p-4 transition-opacity duration-500",
                                             activeStep === step.id ? "opacity-100" : "opacity-0 pointer-events-none",
                                         )}
                                     >

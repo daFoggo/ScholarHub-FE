@@ -61,7 +61,7 @@ function DataTableActionBar<TData>({
       role="toolbar"
       aria-orientation="horizontal"
       className={cn(
-        "fixed inset-x-0 bottom-6 z-50 mx-auto flex w-fit flex-wrap items-center justify-center gap-2 rounded-md border bg-background p-2 text-foreground shadow-sm",
+        "bottom-6 z-50 fixed inset-x-0 flex flex-wrap justify-center items-center gap-2 bg-background shadow-sm mx-auto p-2 border rounded-md w-fit text-foreground",
         className,
       )}
       {...props}
@@ -92,7 +92,7 @@ function DataTableActionBarAction({
       variant="secondary"
       size={size}
       className={cn(
-        "gap-1.5 border border-secondary bg-secondary/50 hover:bg-secondary/70 [&>svg]:size-3.5",
+        "gap-1.5 bg-secondary/50 hover:bg-secondary/70 border border-secondary [&>svg]:size-3.5",
         size === "icon" ? "size-7" : "h-7",
         className,
       )}
@@ -110,7 +110,7 @@ function DataTableActionBarAction({
       <TooltipTrigger asChild>{trigger}</TooltipTrigger>
       <TooltipContent
         sideOffset={6}
-        className="border bg-accent font-semibold text-foreground dark:bg-zinc-900 [&>span]:hidden"
+        className="[&>span]:hidden bg-accent dark:bg-zinc-900 border font-semibold text-foreground"
       >
         <p>{tooltip}</p>
       </TooltipContent>
@@ -130,8 +130,8 @@ function DataTableActionBarSelection<TData>({
   }, [table]);
 
   return (
-    <div className="flex h-7 items-center rounded-md border pr-1 pl-2.5">
-      <span className="whitespace-nowrap text-xs">
+    <div className="flex items-center pr-1 pl-2.5 border rounded-md h-7">
+      <span className="text-xs whitespace-nowrap">
         {table.getFilteredSelectedRowModel().rows.length} selected
       </span>
       <Separator
@@ -151,10 +151,10 @@ function DataTableActionBarSelection<TData>({
         </TooltipTrigger>
         <TooltipContent
           sideOffset={10}
-          className="flex items-center gap-2 border bg-accent px-2 py-1 font-semibold text-foreground dark:bg-zinc-900 [&>span]:hidden"
+          className="[&>span]:hidden flex items-center gap-2 bg-accent dark:bg-zinc-900 px-2 py-1 border font-semibold text-foreground"
         >
           <p>Clear selection</p>
-          <kbd className="select-none rounded border bg-background px-1.5 py-px text-[0.7rem] text-foreground shadow-xs">
+          <kbd className="bg-background shadow-xs px-1.5 py-px border rounded text-[0.7rem] text-foreground select-none">
             <abbr title="Escape" className="no-underline">
               Esc
             </abbr>

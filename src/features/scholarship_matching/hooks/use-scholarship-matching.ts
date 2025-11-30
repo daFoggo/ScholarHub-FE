@@ -4,6 +4,8 @@ import {
   type IScholarshipMatchingDTO,
   type IScholarshipMatchingResponse,
 } from "../services/scholarship-matching";
+import { personalKeys } from "@/features/user_profile/hooks/use-personal";
+import { toast } from "sonner";
 
 export const scholarshipMatchingKeys = {
   all: ["scholarship-matching"] as const,
@@ -25,6 +27,13 @@ export const usePostScholarshipMatching = () => {
       queryClient.invalidateQueries({
         queryKey: scholarshipMatchingKeys.all,
       });
+
+      // Refresh balance to reflect SPT deduction
+      queryClient.invalidateQueries({ queryKey: personalKeys.all });
+
+      // Show success notification with SPT cost
+      const message = response.message || "Match analysis completed!";
+      toast.success(message);
     },
     onError: (error) => {
       console.error("Error fetching scholarship matching:", error);

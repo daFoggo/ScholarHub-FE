@@ -52,7 +52,7 @@ export const ImageUploadOverlay = ({
   }
 
   return (
-    <div className={cn("relative group cursor-pointer", className)} onClick={handleClick}>
+    <div className={cn("group relative cursor-pointer", className)} onClick={handleClick}>
       {children}
       
       {/* Hover Overlay */}

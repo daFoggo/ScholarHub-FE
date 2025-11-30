@@ -7,5 +7,6 @@
   },
   "files.readonlyInclude": {
     "**/routeTree.gen.ts": true
-  }
+  },
+  "liveServer.settings.port": 5501
 }

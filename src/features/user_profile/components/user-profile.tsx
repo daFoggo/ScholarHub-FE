@@ -9,6 +9,8 @@ import { ProfileHeader } from "./header-section";
 import PersonalInfoSection from "./personal-infos-section";
 import PublicationsSection from "./publications-section";
 import ReferencesSection from "./references-section";
+import { WalletCard } from "./wallet-card";
+import { useGetPersonal } from "../hooks/use-personal";
 
 export const UserProfile = ({
   userId,
@@ -20,6 +22,7 @@ export const UserProfile = ({
   showInOneColumn?: boolean;
 }) => {
   const { user, checkCurrentUser } = useAuth();
+  const { data: personalData } = useGetPersonal();
 
   const isCurrentUser = checkCurrentUser(userId);
 
@@ -35,11 +38,17 @@ export const UserProfile = ({
       )}
       <div
         className={cn(
-          "grid gap-6",
+          "gap-6 grid",
           showInOneColumn ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-5"
         )}
       >
         <div className="space-y-6 lg:col-span-2">
+          {isCurrentUser && (
+            <WalletCard
+              walletAddress={personalData?.wallet_address}
+              sptBalance={personalData?.spt_balance}
+            />
+          )}
           <PersonalInfoSection isCurrentUser={isCurrentUser} />
           <DocumentsSection isCurrentUser={isCurrentUser} />
         </div>

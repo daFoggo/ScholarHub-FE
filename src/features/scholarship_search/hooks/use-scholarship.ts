@@ -2,6 +2,7 @@ import { GC_TIME, STALE_TIME } from "@/utils/constants";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { scholarshipSearchServices } from "../services/scholarship-search";
+import { personalKeys } from "@/features/user_profile/hooks/use-personal";
 
 export const scholarshipSearchKeys = {
   all: ["scholarshipSearch"] as const,
@@ -55,11 +56,28 @@ export const useForceRecreateScholarshipRecommend = () => {
   return useMutation({
     mutationFn: () =>
       scholarshipSearchServices.forceRecreateScholarshipRecommend(),
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: scholarshipSearchKeys.lists(),
       });
-      toast.success("Scholarship recommendations recreated successfully");
+      // Refresh balance to reflect SPT deduction
+      queryClient.invalidateQueries({ queryKey: personalKeys.all });
+
+      const message = data.message || "Recommendations updated!";
+      toast.success(message);
+    },
+    onError: (error: any) => {
+      const errorStatus = error?.response?.status;
+
+      if (errorStatus === 402) {
+        toast.error("Insufficient SPT balance to re-evaluate recommendations.");
+      } else if (errorStatus === 400) {
+        toast.error(
+          "Please create a blockchain wallet before using this service."
+        );
+      } else {
+        toast.error("Failed to update recommendations. Please try again.");
+      }
     },
   });
 };

@@ -6,6 +6,7 @@ import type {
   IUpdateScholarshipDTO,
 } from "../services/scholarship-management";
 import { scholarshipManagementServices } from "../services/scholarship-management";
+import { personalKeys } from "@/features/user_profile/hooks/use-personal";
 
 export const scholarshipManagementKeys = {
   all: ["scholarshipManagement"] as const,
@@ -36,7 +37,12 @@ export const useCreateScholarship = () => {
       queryClient.invalidateQueries({
         queryKey: scholarshipManagementKeys.myList(),
       });
-      toast.success(data.message || "Scholarship created successfully");
+      // Refresh balance and show toast
+      queryClient.invalidateQueries({ queryKey: personalKeys.all });
+
+      // Use API message which may include reward amount
+      const message = data.message || "Scholarship published! Reward received.";
+      toast.success(message + " 🎉");
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to create scholarship");

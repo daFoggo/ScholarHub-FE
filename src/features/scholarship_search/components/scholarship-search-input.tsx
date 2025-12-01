@@ -17,7 +17,9 @@ const ScholarshipSearchInput = memo(
     clearAllFilters,
     isAuthenticated,
     onSearch,
-  }: IScholarshipSearchInputProps & { onSearch: () => void }) => {
+  }: IScholarshipSearchInputProps & {
+    onSearch: (overrideValue?: string) => void;
+  }) => {
     const [isFocused, setIsFocused] = useState(false);
     const [isAlertVisible, setIsAlertVisible] = useState(true);
     const navigate = useNavigate();
@@ -38,7 +40,8 @@ const ScholarshipSearchInput = memo(
 
     const handleClearInput = useCallback(() => {
       setValue("");
-    }, [setValue]);
+      onSearch("");
+    }, [setValue, onSearch]);
 
     const handleFocus = useCallback(() => setIsFocused(true), []);
     const handleBlur = useCallback(() => setIsFocused(false), []);
@@ -85,7 +88,7 @@ const ScholarshipSearchInput = memo(
           <Button
             variant="default"
             className="px-4 rounded-full"
-            onClick={onSearch}
+            onClick={() => onSearch()}
           >
             Search
           </Button>

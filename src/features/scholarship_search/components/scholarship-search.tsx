@@ -105,11 +105,16 @@ export const ScholarshipSearch = () => {
     });
   }, []);
 
-  const handleSearch = useCallback(() => {
-    const q = buildSearchQuery(currentSearchValue, activeFilters);
-    setSearchQuery(q);
-    setCurrentPage(1);
-  }, [currentSearchValue, activeFilters, buildSearchQuery]);
+  const handleSearch = useCallback(
+    (overrideValue?: string) => {
+      const valueToUse =
+        overrideValue !== undefined ? overrideValue : currentSearchValue;
+      const q = buildSearchQuery(valueToUse, activeFilters);
+      setSearchQuery(q);
+      setCurrentPage(1);
+    },
+    [currentSearchValue, activeFilters, buildSearchQuery]
+  );
 
   const removeFilter = useCallback(
     (key: SEARCH_KEYS, value: string) => {

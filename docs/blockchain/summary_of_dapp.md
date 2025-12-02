@@ -107,3 +107,7 @@ Hệ thống **ScholarhubPoint** là một nền kinh tế token khép kín đư
     *   Đã kết nối thành công với RPC node.
     *   Đã thực hiện được transaction tạo ví và cấp quyền (Approve) cho ServiceManager.
     *   Đã xác minh transaction hiển thị trên Block Explorer/Web Interface.
+
+## 7. Chi tiết kỹ thuật
+Để xem chi tiết về Gas Optimization, Token Economics, Security Mechanisms và Network Configuration, vui lòng xem tài liệu: [Blockchain Technical Details](./blockchain_technical_details.md)
+

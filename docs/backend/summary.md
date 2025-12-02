@@ -9,7 +9,7 @@ Hệ thống được xây dựng theo kiến trúc Microservices (ở mức đ�
 *   **Backend**: Sử dụng **FastAPI** (Python), cung cấp RESTful API cho frontend.
 *   **Database**: **PostgreSQL** (phiên bản 15-alpine) để lưu trữ dữ liệu truyền thống (user, profile, bài đăng...).
 *   **Blockchain**: Mạng **Hyperledger Besu** (Quorum) private network. Dùng để lưu trữ các giao dịch liên quan đến token thưởng (SPT) và xác thực học bổng.
-*   **AI**: Có tích hợp các module AI cho tìm kiếm thông minh (`smart_search`) và gợi ý hồ sơ (`profile_matching`), có thể sử dụng LangChain (dựa trên biến môi trường trong `main.py`).
+*   **AI**: Có tích hợp các module AI cho tìm kiếm thông minh (`smart_search`) và gợi ý hồ sơ (`profile_matching`), có thể sử dụng LangChain (dựa trên biến môi trường trong `main.py`). Chi tiết xem tại [AI Module Details](ai_module_details.md).
 
 ## 3. Chi tiết kỹ thuật
 
@@ -51,6 +51,8 @@ Hệ thống được xây dựng theo kiến trúc Microservices (ở mức đ�
     *   **Đã hoàn thành (v1)**: Tích hợp logic Blockchain vào các API.
     *   **Live Integration**: ✅ **HOÀN TẤT & ĐÃ KIỂM TRA**. Backend đã kết nối thành công với mạng Besu thật.
     *   **Wallet Creation**: Tự động tạo ví và gửi transaction `Approve` lên mạng ngay khi user đăng ký.
+    *   **Social Rewards**: ✅ **ĐÃ HOẠT ĐỘNG**. Tự động thưởng SPT khi Post/Comment/Like/Đăng học bổng.
+    *   **AI Service Payment**: ✅ **ĐÃ HOẠT ĐỘNG**. Charge SPT cho AI Re-evaluation (3 SPT) và Profile Matching (5 SPT).
     *   **Contracts**: Đã load và tương tác tốt với Smart Contracts đã deploy.
     *   Source code Smart Contract cần được kiểm tra kỹ ở repo/thư mục tương ứng (nếu có quyền truy cập) để đảm bảo logic on-chain khớp với logic backend.
 
@@ -60,3 +62,23 @@ Hệ thống được xây dựng theo kiến trúc Microservices (ở mức đ�
 3.  Cập nhật địa chỉ contract vào `backend/blockchain/contract_addresses.json`.
 4.  Cấu hình biến môi trường (`.env`) cho backend, đặc biệt là các key liên quan đến ví và AI.
 5.  Chạy `docker compose up --build` để khởi động backend và database.
+
+## 6. Cập nhật gần đây
+
+### 2025-12-01: RAG Smart Search Bug Fix ✅
+**Vấn đề**: Smart search API trả về kết quả rỗng cho một số queries như "scholarship essay".
+
+**Nguyên nhân**:
+1. FAISS retriever threshold quá cao (0.6) → không retrieve được documents cho queries có similarity thấp
+2. LLM prompt quá strict → LLM trả về empty array ngay cả khi có documents
+
+**Giải pháp**:
+1. Giảm threshold từ 0.6 → 0.4 (`backend/ai/SmartSearch/v1/Retriever.py`)
+2. Cập nhật `scholarshipSelect_prompt` để linh hoạt hơn (`backend/ai/core/Prompts.py`)
+
+**Kết quả**:
+- Query "scholarship essay": 0 → 9 scholarships ✅
+- Query "computer science phd": 10 → 19 scholarships ✅
+- Cải thiện recall mà không làm giảm precision
+
+**Chi tiết**: Xem [`rag_smart_search_debug.md`](./rag_smart_search_debug.md)

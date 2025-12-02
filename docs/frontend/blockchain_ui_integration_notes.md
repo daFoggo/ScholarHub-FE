@@ -71,35 +71,3 @@ spt_balance?: number;
 *   **Giải pháp**:
     *   Cập nhật `useUploadProfileMedia` để invalidate thêm query key `['auth', 'user']`.
     *   Điều này kích hoạt `useAuth` gọi lại API `getCurrentUser`, cập nhật `userData` trong context và re-render UI với ảnh mới.
-
-## 7. SPT Transaction Notifications (2025-12-01)
-### 7.1. Enhanced User Feedback
-*   **Mục tiêu**: Cung cấp thông tin rõ ràng về các giao dịch SPT (phí và thưởng) để người dùng hiểu rõ hơn về hệ thống.
-*   **Thực hiện**:
-    *   **Profile Matching**: Thêm success toast với thông tin SPT deduction từ API response.
-    *   **Re-evaluate**: Thêm error handling (402/400) và success toast với SPT cost.
-    *   **Scholarship Creation**: Cải thiện toast để hiển thị số SPT thưởng (từ API message) + emoji 🎉.
-    *   **Community Actions** (Post, Comment, Reply): Cập nhật để sử dụng message từ API thay vì text cố định.
-*   **Kỹ thuật**:
-    *   Tất cả hooks đều parse `response.message` từ API để hiển thị số tiền chính xác.
-    *   Invalidate `personalKeys.all` sau mỗi transaction để refresh số dư ngay lập tức.
-    *   Error handling thống nhất cho 402 (Insufficient SPT) và 400 (No Wallet).
-
-## 8. Scholarship Management Statistics & Charts (2025-12-01)
-### 8.1. Provider Dashboard Enhancement
-*   **Mục tiêu**: Cung cấp insights cho scholarship providers thông qua statistics và visualizations.
-*   **Statistics Cards** (4 cards):
-    *   **Total Scholarships**: Tổng số học bổng
-    *   **Active Programs**: Học bổng còn hạn (deadline > now) + badge "Active"
-    *   **Upcoming Deadlines**: Học bổng sắp hết hạn (30 ngày) + badge "Urgent"
-    *   **Countries**: Số quốc gia (global reach)
-*   **Charts**:
-    *   **Status Distribution** (Pie Chart): Phân bố Active/Expired/No Deadline
-    *   **Creation Timeline** (Bar Chart): Lịch sử đăng học bổng 6 tháng
-*   **Kỹ thuật**:
-    *   Sử dụng shadcn `ChartContainer`, `ChartTooltip`, `ChartTooltipContent`
-    *   Recharts library cho rendering
-    *   Client-side calculations (không cần API mới)
-    *   Responsive design + empty state handling
-
-
